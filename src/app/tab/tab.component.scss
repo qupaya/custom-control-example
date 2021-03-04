@@ -1,0 +1,7 @@
+:host {
+  cursor: pointer;
+}
+
+:host-context([selected]) {
+  color: green;
+}
