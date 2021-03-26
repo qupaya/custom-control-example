@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export const TABS_VALUE_ACCESSOR_PROVIDER = {
@@ -17,23 +22,27 @@ export const TABS_VALUE_ACCESSOR_PROVIDER = {
 export class TabsComponent<T> implements ControlValueAccessor {
   public value: T | undefined;
 
-  onChange!: (value: T) => void;
-  onTouched!: () => void;
+  public onChange!: (value: T) => void;
+  public onTouched!: () => void;
+
+  public constructor(private readonly cdr: ChangeDetectorRef) {}
 
   public changeValue(value: T) {
     this.onChange((this.value = value));
     this.onTouched();
   }
 
-  writeValue(value: T): void {
+  public writeValue(value: T): void {
     this.value = value;
+
+    this.cdr.markForCheck();
   }
 
-  registerOnChange(fn: (value: T) => void): void {
+  public registerOnChange(fn: (value: T) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 }
